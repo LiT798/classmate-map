@@ -139,7 +139,44 @@ const App = {
   }
 };
 
-function startApp() {
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("地图库加载失败，请检查网络后刷新"));
+    document.body.appendChild(script);
+  });
+}
+
+function loadStylesheet(href) {
+  if (document.querySelector(`link[href="${href}"]`)) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.href = href;
+  document.head.appendChild(link);
+}
+
+async function loadLeaflet() {
+  if (window.L) return;
+
+  const leafletCss = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css";
+  const leafletJs = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js";
+
+  loadStylesheet(leafletCss);
+  await loadScript(leafletJs);
+}
+
+let appStarted = false;
+
+async function startApp() {
+  if (appStarted) {
+    MapManager.map?.invalidateSize();
+    return;
+  }
+
+  await loadLeaflet();
   MapManager.init();
   App.init();
+  appStarted = true;
 }

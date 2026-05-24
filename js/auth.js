@@ -10,6 +10,9 @@ const AUTH_CONFIG = {
 
 const Auth = {
   async hashPassword(password) {
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error("浏览器不支持安全验证，请使用 HTTPS 访问");
+    }
     const data = new TextEncoder().encode(password);
     const hashBuffer = await crypto.subtle.digest("SHA-256", data);
     return Array.from(new Uint8Array(hashBuffer))
@@ -30,10 +33,10 @@ const Auth = {
     location.reload();
   },
 
-  showApp() {
+  async showApp() {
     document.getElementById("auth-gate").hidden = true;
     document.getElementById("main-app").hidden = false;
-    startApp();
+    await startApp();
   },
 
   showGate() {
@@ -47,32 +50,53 @@ const Auth = {
   },
 
   init() {
+    const form = document.getElementById("auth-form");
+    const input = document.getElementById("auth-password");
+    const errorEl = document.getElementById("auth-error");
+    const submitBtn = form.querySelector('button[type="submit"]');
+
     if (this.isAuthenticated()) {
-      this.showApp();
+      this.showApp().catch((err) => {
+        errorEl.textContent = err.message || "加载失败，请刷新重试";
+        errorEl.hidden = false;
+        this.showGate();
+      });
       return;
     }
 
     this.showGate();
 
-    const form = document.getElementById("auth-form");
-    const input = document.getElementById("auth-password");
-    const errorEl = document.getElementById("auth-error");
-
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       errorEl.hidden = true;
+      errorEl.textContent = "口令错误，请重试";
+      submitBtn.disabled = true;
+      submitBtn.textContent = "验证中...";
 
-      const ok = await this.verify(input.value);
-      if (ok) {
-        this.grantAccess();
-        this.showApp();
-      } else {
+      try {
+        const ok = await this.verify(input.value);
+        if (ok) {
+          this.grantAccess();
+          submitBtn.textContent = "加载中...";
+          await this.showApp();
+        } else {
+          errorEl.hidden = false;
+          input.value = "";
+          input.focus();
+        }
+      } catch (err) {
+        errorEl.textContent = err.message || "验证失败，请刷新重试";
         errorEl.hidden = false;
-        input.value = "";
-        input.focus();
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = "进入";
       }
     });
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => Auth.init());
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => Auth.init());
+} else {
+  Auth.init();
+}
