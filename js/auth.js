@@ -1,102 +1,114 @@
 /**
- * 访问控制
- * 修改口令：运行 python -c "import hashlib; print(hashlib.sha256('你的新口令'.encode()).hexdigest())"
- * 将输出的 hash 填入 PASSWORD_HASH
+ * 访问控制（独立加载，不依赖其他脚本）
+ * 修改口令：直接改下面的 ACCESS_PASSWORD
  */
-const AUTH_CONFIG = {
-  PASSWORD_HASH: "c0f2cde8a038760cffe074ede219f48eacb3b3cc680d37daa3997738f283fea1",
-  SESSION_KEY: "classmate-map-auth"
-};
+const ACCESS_PASSWORD = "class2020";
+const SESSION_KEY = "classmate-map-auth";
 
-const Auth = {
-  async hashPassword(password) {
-    if (!window.crypto || !window.crypto.subtle) {
-      throw new Error("浏览器不支持安全验证，请使用 HTTPS 访问");
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(`script[src="${src}"]`)) {
+      resolve();
+      return;
     }
-    const data = new TextEncoder().encode(password);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    return Array.from(new Uint8Array(hashBuffer))
-      .map((b) => b.toString(16).padStart(2, "0"))
-      .join("");
-  },
+    const script = document.createElement("script");
+    script.src = src;
+    script.onload = resolve;
+    script.onerror = () => reject(new Error("脚本加载失败: " + src));
+    document.body.appendChild(script);
+  });
+}
 
-  isAuthenticated() {
-    return sessionStorage.getItem(AUTH_CONFIG.SESSION_KEY) === "ok";
-  },
+function setVisible(id, visible) {
+  const el = document.getElementById(id);
+  if (visible) {
+    el.removeAttribute("hidden");
+  } else {
+    el.setAttribute("hidden", "");
+  }
+}
 
-  grantAccess() {
-    sessionStorage.setItem(AUTH_CONFIG.SESSION_KEY, "ok");
-  },
+async function bootApp() {
+  await loadScript("js/data.js");
+  await loadScript("js/map.js");
+  await loadScript("js/app.js");
+  await startApp();
 
-  revokeAccess() {
-    sessionStorage.removeItem(AUTH_CONFIG.SESSION_KEY);
-    location.reload();
-  },
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.onclick = () => {
+      sessionStorage.removeItem(SESSION_KEY);
+      location.reload();
+    };
+  }
+}
 
-  async showApp() {
-    document.getElementById("auth-gate").hidden = true;
-    document.getElementById("main-app").hidden = false;
-    await startApp();
-  },
+function verifyPassword(password) {
+  return password.trim() === ACCESS_PASSWORD;
+}
 
-  showGate() {
-    document.getElementById("auth-gate").hidden = false;
-    document.getElementById("main-app").hidden = true;
-  },
+async function handleLogin() {
+  const input = document.getElementById("auth-password");
+  const errorEl = document.getElementById("auth-error");
+  const submitBtn = document.getElementById("auth-submit");
 
-  async verify(password) {
-    const hash = await this.hashPassword(password);
-    return hash === AUTH_CONFIG.PASSWORD_HASH;
-  },
+  errorEl.hidden = true;
+  submitBtn.disabled = true;
+  submitBtn.textContent = "验证中...";
 
-  init() {
-    const form = document.getElementById("auth-form");
-    const input = document.getElementById("auth-password");
-    const errorEl = document.getElementById("auth-error");
-    const submitBtn = form.querySelector('button[type="submit"]');
-
-    if (this.isAuthenticated()) {
-      this.showApp().catch((err) => {
-        errorEl.textContent = err.message || "加载失败，请刷新重试";
-        errorEl.hidden = false;
-        this.showGate();
-      });
+  try {
+    if (!verifyPassword(input.value)) {
+      errorEl.hidden = false;
+      input.value = "";
+      input.focus();
       return;
     }
 
-    this.showGate();
+    sessionStorage.setItem(SESSION_KEY, "ok");
+    submitBtn.textContent = "加载中...";
+    setVisible("auth-gate", false);
+    setVisible("main-app", true);
+    await bootApp();
+  } catch (err) {
+    setVisible("auth-gate", true);
+    setVisible("main-app", false);
+    errorEl.textContent = err.message || "加载失败，请刷新重试";
+    errorEl.hidden = false;
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = "进入";
+  }
+}
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      errorEl.hidden = true;
-      errorEl.textContent = "口令错误，请重试";
-      submitBtn.disabled = true;
-      submitBtn.textContent = "验证中...";
+function initAuth() {
+  const form = document.getElementById("auth-form");
+  const submitBtn = document.getElementById("auth-submit");
 
-      try {
-        const ok = await this.verify(input.value);
-        if (ok) {
-          this.grantAccess();
-          submitBtn.textContent = "加载中...";
-          await this.showApp();
-        } else {
-          errorEl.hidden = false;
-          input.value = "";
-          input.focus();
-        }
-      } catch (err) {
-        errorEl.textContent = err.message || "验证失败，请刷新重试";
-        errorEl.hidden = false;
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "进入";
-      }
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    handleLogin();
+  });
+
+  submitBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    handleLogin();
+  });
+
+  if (sessionStorage.getItem(SESSION_KEY) === "ok") {
+    setVisible("auth-gate", false);
+    setVisible("main-app", true);
+    bootApp().catch((err) => {
+      const errorEl = document.getElementById("auth-error");
+      setVisible("auth-gate", true);
+      setVisible("main-app", false);
+      errorEl.textContent = err.message || "加载失败，请刷新重试";
+      errorEl.hidden = false;
     });
   }
-};
+}
 
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => Auth.init());
+  document.addEventListener("DOMContentLoaded", initAuth);
 } else {
-  Auth.init();
+  initAuth();
 }

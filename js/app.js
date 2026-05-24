@@ -171,7 +171,9 @@ let appStarted = false;
 
 async function startApp() {
   if (appStarted) {
-    MapManager.map?.invalidateSize();
+    if (MapManager.map) {
+      MapManager.map.invalidateSize();
+    }
     return;
   }
 

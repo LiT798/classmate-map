@@ -336,6 +336,11 @@ body {
 }
 
 /* Auth gate */
+.auth-gate[hidden],
+#main-app[hidden] {
+  display: none !important;
+}
+
 .auth-gate {
   display: flex;
   align-items: center;

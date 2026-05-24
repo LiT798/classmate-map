@@ -14,7 +14,7 @@
       <form id="auth-form">
         <input type="password" id="auth-password" placeholder="班级口令" autocomplete="off" required>
         <p id="auth-error" class="auth-error" hidden>口令错误，请重试</p>
-        <button type="submit">进入</button>
+        <button type="submit" id="auth-submit">进入</button>
       </form>
     </div>
   </div>
@@ -61,12 +61,6 @@
     </main>
   </div>
 
-  <script src="js/data.js"></script>
-  <script src="js/map.js"></script>
-  <script src="js/app.js"></script>
   <script src="js/auth.js"></script>
-  <script>
-    document.getElementById("logout-btn")?.addEventListener("click", () => Auth.revokeAccess());
-  </script>
 </body>
 </html>
