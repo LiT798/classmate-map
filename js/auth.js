@@ -2,7 +2,7 @@
  * 访问控制（独立加载，不依赖其他脚本）
  * 修改口令：直接改下面的 ACCESS_PASSWORD
  */
-const ACCESS_PASSWORD = "class2020";
+const ACCESS_PASSWORD = "ng191";
 const SESSION_KEY = "classmate-map-auth";
 
 function loadScript(src) {

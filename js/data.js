@@ -23,7 +23,7 @@ const classmates = [
   {
     id: "gu-huan",
     name: "顾桓",
-    city: "深圳",
+    city: "上海",
     coords: [22.5431, 114.0579],
     field: "机器人公司",
     gradYear: 2020
