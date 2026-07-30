@@ -152,7 +152,7 @@ const classmates = [
     id: "zhou-xinyi",
     name: "周昕怡",
     city: "美国读博",
-    coords: [40.7128, -74.0060],
+    coords: [39.8283, -98.5795],
     field: "读博",
     gradYear: 2020
   },

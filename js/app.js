@@ -216,3 +216,5 @@ async function startApp() {
   App.init();
   appStarted = true;
 }
+
+startApp();
