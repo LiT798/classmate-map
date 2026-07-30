@@ -80,13 +80,16 @@ const App = {
     }
 
     this.filteredList.forEach((classmate) => {
-      const photoUrl = classmate.photo || "photos/default.svg";
+      const text = this.getAvatarText(classmate.name);
+      const color = this.getAvatarColor(classmate.name);
       const item = document.createElement("button");
       item.type = "button";
       item.className = `classmate-item${this.activeId === classmate.id ? " active" : ""}`;
       item.dataset.id = classmate.id;
       item.innerHTML = `
-        <img class="item-avatar" src="${photoUrl}" alt="${classmate.name}" onerror="this.src='photos/default.svg'">
+        <div class="item-avatar" style="background: ${color.bg}; color: ${color.text}; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.95rem; border: none;">
+          ${text}
+        </div>
         <div class="item-info">
           <strong>${classmate.name}</strong>
           <span>${classmate.city} · ${classmate.field}</span>
@@ -95,6 +98,37 @@ const App = {
       item.addEventListener("click", () => this.selectClassmate(classmate.id));
       container.appendChild(item);
     });
+  },
+
+  // 根据姓名生成显示文字（2字取最后一个字，3字及以上取后两位）
+  getAvatarText(name) {
+    if (name.length <= 2) {
+      return name.slice(-1);
+    }
+    return name.slice(-2);
+  },
+
+  // 根据姓名生成低饱和度的背景色
+  getAvatarColor(name) {
+    const colors = [
+      { bg: "#7c9eb2", text: "#fff" },  // 灰蓝
+      { bg: "#8fa4b0", text: "#fff" },  // 灰青
+      { bg: "#9b8fb0", text: "#fff" },  // 灰紫
+      { bg: "#b09b8a", text: "#fff" },  // 灰棕
+      { bg: "#8a9eb0", text: "#fff" },  // 蓝灰
+      { bg: "#9fb08a", text: "#fff" },  // 黄绿灰
+      { bg: "#b08a9f", text: "#fff" },  // 粉紫灰
+      { bg: "#8ab09f", text: "#fff" },  // 青绿灰
+      { bg: "#a09080", text: "#fff" },  // 暖灰
+      { bg: "#8090a0", text: "#fff" },  // 冷灰
+      { bg: "#94a8b8", text: "#fff" },  // 银蓝
+      { bg: "#a8b094", text: "#fff" },  // 橄榄灰
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
   },
 
   renderStats() {
