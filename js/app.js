@@ -194,8 +194,8 @@ function loadStylesheet(href) {
 async function loadLeaflet() {
   if (window.L) return;
 
-  const leafletCss = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css";
-  const leafletJs = "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js";
+  const leafletCss = "https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.css";
+  const leafletJs = "https://cdn.bootcdn.net/ajax/libs/leaflet/1.9.4/leaflet.min.js";
 
   loadStylesheet(leafletCss);
   await loadScript(leafletJs);
