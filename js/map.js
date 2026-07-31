@@ -37,6 +37,29 @@ const MapManager = {
     return colors[Math.abs(hash) % colors.length];
   },
 
+  // 按坐标分组，同一地点的人围成一圈散开
+  buildCoordIndex(classmateList) {
+    const groups = {};
+    classmateList.forEach((c) => {
+      const key = `${c.coords[0].toFixed(4)},${c.coords[1].toFixed(4)}`;
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(c);
+    });
+
+    // 为每个有多人的组生成偏移坐标
+    Object.values(groups).forEach((group) => {
+      const n = group.length;
+      group.forEach((c, i) => {
+        if (n === 1) return;
+        // 围成一圈散开，角度均匀分布
+        const angle = (2 * Math.PI * i) / n;
+        const radius = 0.015 + n * 0.004;
+        c._offsetLat = c.coords[0] + radius * Math.cos(angle);
+        c._offsetLng = c.coords[1] + radius * Math.sin(angle);
+      });
+    });
+  },
+
   init() {
     this.map = L.map("map", {
       center: [35.0, 105.0],
@@ -94,8 +117,15 @@ const MapManager = {
     this.markerGroup.clearLayers();
     this.markers = {};
 
+    // 先计算坐标偏移
+    this.buildCoordIndex(classmateList);
+
     classmateList.forEach((classmate) => {
-      const marker = L.marker(classmate.coords, {
+      // 优先用偏移坐标，其次原始坐标
+      const lat = classmate._offsetLat !== undefined ? classmate._offsetLat : classmate.coords[0];
+      const lng = classmate._offsetLng !== undefined ? classmate._offsetLng : classmate.coords[1];
+
+      const marker = L.marker([lat, lng], {
         icon: this.createMarkerIcon(classmate)
       });
 
@@ -113,7 +143,11 @@ const MapManager = {
     });
 
     if (classmateList.length > 0) {
-      const bounds = L.latLngBounds(classmateList.map((c) => c.coords));
+      // 用偏移后的坐标计算边界
+      const coords = classmateList.map((c) =>
+        c._offsetLat !== undefined ? [c._offsetLat, c._offsetLng] : c.coords
+      );
+      const bounds = L.latLngBounds(coords);
       this.map.fitBounds(bounds, { padding: [50, 40] });
     }
   },
