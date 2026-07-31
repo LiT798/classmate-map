@@ -45,9 +45,10 @@ const MapManager = {
       maxZoom: 18
     });
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19
+    L.tileLayer("https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}", {
+      subdomains: "1234",
+      attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+      maxZoom: 18
     }).addTo(this.map);
 
     this.markerGroup = L.layerGroup().addTo(this.map);

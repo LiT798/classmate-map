@@ -10,7 +10,7 @@ const classmates = [
     city: "南京",
     coords: [32.0603, 118.7969],
     field: "通讯网络设备",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "chen-yufeng",
@@ -18,7 +18,7 @@ const classmates = [
     city: "福州",
     coords: [26.0753, 119.2965],
     field: "私企机械岗",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "chen-jiayi",
@@ -26,7 +26,7 @@ const classmates = [
     city: "深圳",
     coords: [22.5431, 114.0579],
     field: "",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "cheng-yuti",
@@ -34,7 +34,7 @@ const classmates = [
     city: "兰州",
     coords: [36.0608, 103.8343],
     field: "科研院所",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "cheng-tianyi",
@@ -42,7 +42,7 @@ const classmates = [
     city: "深圳",
     coords: [22.5431, 114.0579],
     field: "车企",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "gu-huan",
@@ -50,7 +50,7 @@ const classmates = [
     city: "上海",
     coords: [31.2304, 121.4737],
     field: "机器人公司",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "li-qianhui",
@@ -58,7 +58,7 @@ const classmates = [
     city: "上海",
     coords: [31.2304, 121.4737],
     field: "央国企",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "li-hongye",
@@ -66,7 +66,7 @@ const classmates = [
     city: "北京",
     coords: [39.9042, 116.4074],
     field: "公务体系",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "li-teng",
@@ -74,7 +74,7 @@ const classmates = [
     city: "天津",
     coords: [39.3434, 117.3616],
     field: "南开大学读博",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "ma-jingyi",
@@ -82,7 +82,7 @@ const classmates = [
     city: "芜湖",
     coords: [31.3308, 118.3792],
     field: "车企",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "shu-can",
@@ -90,7 +90,7 @@ const classmates = [
     city: "深圳",
     coords: [22.5431, 114.0579],
     field: "比亚迪",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "sang-wenqi",
@@ -98,7 +98,7 @@ const classmates = [
     city: "银川",
     coords: [38.4872, 106.2309],
     field: "机械制造",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "tuersun",
@@ -106,7 +106,7 @@ const classmates = [
     city: "阿克苏",
     coords: [41.1663, 80.2624],
     field: "公务体系",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "wu-di",
@@ -114,7 +114,7 @@ const classmates = [
     city: "大连",
     coords: [38.9140, 121.6147],
     field: "轴承制造",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "wu-xiaohuan",
@@ -122,7 +122,7 @@ const classmates = [
     city: "深圳",
     coords: [22.5431, 114.0579],
     field: "车企",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "ye-qingqing",
@@ -130,7 +130,7 @@ const classmates = [
     city: "西安",
     coords: [34.3416, 108.9398],
     field: "私企",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "yin-zhuoxiao",
@@ -138,7 +138,7 @@ const classmates = [
     city: "淮安",
     coords: [33.5858, 119.1569],
     field: "车企",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "wang-ke",
@@ -146,15 +146,15 @@ const classmates = [
     city: "北京",
     coords: [39.9042, 116.4074],
     field: "中国农业大学",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "zhou-xinyi",
     name: "周昕怡",
     city: "美国读博",
-    coords: [39.8283, -98.5795],
+    coords: [39.9042, 116.4074],
     field: "读博",
-    gradYear: 2020
+    gradYear: 2019
   },
   {
     id: "zhao-xuan",
@@ -162,7 +162,7 @@ const classmates = [
     city: "深圳",
     coords: [22.5431, 114.0579],
     field: "车企",
-    gradYear: 2020
+    gradYear: 2019
   }
 ];
 
