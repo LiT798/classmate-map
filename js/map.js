@@ -143,11 +143,8 @@ const MapManager = {
     });
 
     if (classmateList.length > 0) {
-      // 用偏移后的坐标计算边界
-      const coords = classmateList.map((c) =>
-        c._offsetLat !== undefined ? [c._offsetLat, c._offsetLng] : c.coords
-      );
-      const bounds = L.latLngBounds(coords);
+      // 用原始坐标算边界，确保能看到城市全貌
+      const bounds = L.latLngBounds(classmateList.map((c) => c.coords));
       this.map.fitBounds(bounds, { padding: [50, 40] });
     }
   },
