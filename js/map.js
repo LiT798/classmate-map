@@ -68,9 +68,9 @@ const MapManager = {
       maxZoom: 18
     });
 
-    L.tileLayer("https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}", {
-      subdomains: "1234",
-      attribution: '&copy; <a href="https://www.amap.com/">高德地图</a>',
+    L.tileLayer("https://rt0{s}.gtimg.cn/tile?v=1.0.4&x={x}&y={y}&z={z}", {
+      subdomains: "123",
+      attribution: '&copy; <a href="https://www.map.qq.com/">腾讯地图</a>',
       maxZoom: 18
     }).addTo(this.map);
 
