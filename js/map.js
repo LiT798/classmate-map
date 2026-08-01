@@ -68,10 +68,9 @@ const MapManager = {
       maxZoom: 18
     });
 
-    L.tileLayer("https://rt0{s}.gtimg.cn/tile?v=1.0.4&x={x}&y={y}&z={z}", {
-      subdomains: "123",
-      attribution: '&copy; <a href="https://www.map.qq.com/">腾讯地图</a>',
-      maxZoom: 18
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 19
     }).addTo(this.map);
 
     this.markerGroup = L.layerGroup().addTo(this.map);
