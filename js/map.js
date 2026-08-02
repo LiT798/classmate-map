@@ -62,7 +62,7 @@ const MapManager = {
 
   init() {
     this.map = L.map("map", {
-      center: [35.0, 105.0],
+      center: [39.9042, 116.4074],
       zoom: 5,
       minZoom: 3,
       maxZoom: 18
@@ -145,6 +145,9 @@ const MapManager = {
       // 用原始坐标算边界，确保能看到城市全貌
       const bounds = L.latLngBounds(classmateList.map((c) => c.coords));
       this.map.fitBounds(bounds, { padding: [50, 40] });
+    } else {
+      // 无数据时默认显示北京
+      this.map.setView([39.9042, 116.4074], 5, { animate: true });
     }
   },
 
