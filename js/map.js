@@ -142,9 +142,8 @@ const MapManager = {
     });
 
     if (classmateList.length > 0) {
-      // 用原始坐标算边界，确保能看到城市全貌
-      const bounds = L.latLngBounds(classmateList.map((c) => c.coords));
-      this.map.fitBounds(bounds, { padding: [50, 40] });
+      // 固定显示中国全图，不受数据坐标影响
+      this.map.setView([35.0, 105.0], 5, { animate: true });
     } else {
       // 无数据时默认显示北京
       this.map.setView([39.9042, 116.4074], 5, { animate: true });
